@@ -1,0 +1,9 @@
+{
+  "name": "Banco Imobiliário - Maquininha",
+  "short_name": "Banco Imobiliário",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5b900",
+  "theme_color": "#f5b900",
+  "icons": []
+}
