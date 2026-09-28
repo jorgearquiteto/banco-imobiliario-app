@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#f5b900">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-192.png">
 <title>Banco Imobiliário</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -23,8 +22,8 @@ button{font:inherit}
 .key:active{transform:translateY(3px);box-shadow:0 1px 0 #080808}
 .fn{font-size:clamp(20px,6vw,34px);font-weight:800}.m{color:#ffd500}.back{color:#00d66b}.k{color:#238ce0}.c{color:#ff2424}
 .action{font-size:clamp(13px,3.6vw,18px);font-weight:900}
-.plus{background:linear-gradient(#19c832,#079d1d)}.neutral{background:linear-gradient(#596b76,#34444d)}.minus{background:linear-gradient(#ff3030,#c70e0e)}
-.overlay{position:fixed;pointer-events:none;inset:0;background:#000a;display:none;align-items:flex-end;z-index:5}
+.plus{background:linear-gradient(#19c832,#079d1d)}.neutral{background:linear-gradient(#596b76,#34444d);font-size:clamp(42px,13vw,68px);line-height:1}.minus{background:linear-gradient(#ff3030,#c70e0e)}
+.overlay{position:fixed;inset:0;background:#000a;display:none;align-items:flex-end;z-index:5}
 .panel{width:100%;max-height:82dvh;overflow:auto;background:#f3f3f3;border-radius:22px 22px 0 0;padding:18px;color:#222}
 .panel h2{margin:0 0 12px}.panel input{width:100%;padding:14px;margin:6px 0;border:1px solid #aaa;border-radius:10px;font-size:18px}
 .panel button{width:100%;padding:14px;margin:5px 0;border:0;border-radius:10px;font-weight:800}
@@ -47,7 +46,7 @@ button{font:inherit}
 👥 TRANSFERIR</div>
   </div></div>
   <div class="pad">
-    <button class="key fn m" data-cmd="inc1000">+1K</button><button class="key fn back" data-cmd="bonus">←</button><button class="key fn k" data-cmd="inc100">+100</button>
+    <button class="key fn m" data-cmd="m">M</button><button class="key fn back" data-cmd="bonus">←</button><button class="key fn k" data-cmd="k">K</button>
     <button class="key" data-n="7">7</button><button class="key" data-n="8">8</button><button class="key" data-n="9">9</button>
     <button class="key" data-n="4">4</button><button class="key" data-n="5">5</button><button class="key" data-n="6">6</button>
     <button class="key" data-n="1">1</button><button class="key" data-n="2">2</button><button class="key" data-n="3">3</button>
@@ -76,17 +75,17 @@ function keySound(){
 }
 function creditSound(){
   // Crédito: moedas/caixa registradora, brilhante e ascendente.
-  tone(880,.055,'sine',.12,0);
-  tone(1320,.06,'sine',.12,.045);
-  tone(1760,.07,'sine',.11,.09);
-  tone(2349,.13,'sine',.13,.145);
+  tone(880,.055,'sine',.045,0);
+  tone(1320,.06,'sine',.04,.045);
+  tone(1760,.07,'sine',.035,.09);
+  tone(2349,.13,'sine',.035,.145);
 }
 function debitSound(){
   // Débito: saída de dinheiro, descendente e mais grave.
-  tone(784,.055,'triangle',.12,0);
-  tone(587,.07,'triangle',.12,.05);
-  tone(440,.09,'triangle',.13,.105);
-  tone(294,.14,'triangle',.14,.18);
+  tone(784,.055,'triangle',.04,0);
+  tone(587,.07,'triangle',.04,.05);
+  tone(440,.09,'triangle',.045,.105);
+  tone(294,.14,'triangle',.045,.18);
 }
 
 let game=JSON.parse(localStorage.getItem(KEY)||'null')||{players:[],active:0,history:[]};
@@ -143,26 +142,15 @@ function render(){
    requestAnimationFrame(()=>{let s=$('.screen');s.scrollTop=s.scrollHeight;});
  }
 }
-
-function cancelModal(){
- const ov=document.getElementById('overlay');
- if(ov){
-   ov.style.setProperty('display','none','important');ov.style.pointerEvents='none';
-   ov.setAttribute('aria-hidden','true');
- }
- window.transferSource=null;
- render();
-}
-
 function close(){
  const ov=$('#overlay');
- ov.style.display='none';ov.style.pointerEvents='none';
+ ov.style.display='none';
  ov.setAttribute('aria-hidden','true');
  render();
 }
 function closeMenu(){
  const ov=$('#overlay');
- ov.style.display='none';ov.style.pointerEvents='none';
+ ov.style.display='none';
  ov.setAttribute('aria-hidden','true');
  typed='';
  render();
@@ -181,7 +169,7 @@ function open(html){
  $('#panel').innerHTML=html;
  const ov=$('#overlay');
  ov.setAttribute('aria-hidden','false');
- ov.style.display='flex';ov.style.pointerEvents='auto';
+ ov.style.display='flex';
 }
 function menu(){
  let players=game.players.map((p,i)=>`<button class="${i===game.active?'primary':'secondary'}" onclick="selectPlayer(${i})">${p.name} — ${money(p.balance)}</button>`).join('');
@@ -204,7 +192,7 @@ function setup(){
    <button class="primary" onclick="playerNames(5)">5</button>
    <button class="primary" onclick="playerNames(6)">6</button>
  </div>
- <button class="secondary" onclick="cancelModal()">Cancelar</button>`);
+ <button class="secondary" onclick="close()">Cancelar</button>`);
 }
 function playerNames(qty){
  let fields='';
@@ -242,7 +230,7 @@ function selectPlayer(i){game.active=i;typed='';save();close()}
 function chooseCredit(){
  let v=amount();
  if(v<=0){$('#message').textContent='DIGITE UM VALOR';return}
- open(`<h2>Creditar ${money(v)}</h2>${playerRows('creditSelected')}<button class="secondary" onclick="cancelModal()">CANCELAR</button>`);
+ open(`<h2>Creditar ${money(v)}</h2>${playerRows('creditSelected')}<button class="secondary" onclick="close()">CANCELAR</button>`);
 }
 function creditSelected(i){
  let v=amount(),before=game.players.map(x=>x.balance);
@@ -253,7 +241,7 @@ function creditSelected(i){
 function chooseDebit(){
  let v=amount();
  if(v<=0){$('#message').textContent='DIGITE UM VALOR';return}
- open(`<h2>Debitar ${money(v)}</h2>${playerRows('debitSelected')}<button class="secondary" onclick="cancelModal()">CANCELAR</button>`);
+ open(`<h2>Debitar ${money(v)}</h2>${playerRows('debitSelected')}<button class="secondary" onclick="close()">CANCELAR</button>`);
 }
 function debitSelected(i){
  let v=amount();
@@ -265,7 +253,7 @@ function debitSelected(i){
 }
 function fixedBonus(){
  typed='2000';
- open(`<h2>Creditar R$ 2.000,00</h2>${playerRows('bonusSelected')}<button class="secondary" onclick="cancelModal()">CANCELAR</button>`);
+ open(`<h2>Creditar R$ 2.000,00</h2>${playerRows('bonusSelected')}<button class="secondary" onclick="close()">CANCELAR</button>`);
 }
 function bonusSelected(i){
  let before=game.players.map(x=>x.balance),v=2000;
@@ -276,7 +264,7 @@ function bonusSelected(i){
 function receiveChoose(){
  let v=amount();
  if(v<=0){$('#message').textContent='DIGITE UM VALOR';return}
- open(`<h2>Cartões</h2>${playerRows('receiveTo')}<button class="secondary" onclick="cancelModal()">CANCELAR</button>`);
+ open(`<h2>Cartões</h2>${playerRows('receiveTo')}<button class="secondary" onclick="close()">CANCELAR</button>`);
 }
 function receiveTo(i){
  let v=amount(),before=game.players.map(x=>x.balance);
@@ -287,7 +275,7 @@ function receiveTo(i){
 function payChoose(){
  let v=amount();
  if(v<=0){$('#message').textContent='DIGITE UM VALOR';return}
- open(`<h2>Cartões</h2>${playerRows('payFrom')}<button class="secondary" onclick="cancelModal()">CANCELAR</button>`);
+ open(`<h2>Cartões</h2>${playerRows('payFrom')}<button class="secondary" onclick="close()">CANCELAR</button>`);
 }
 function payFrom(i){
  let v=amount();
@@ -300,7 +288,7 @@ function payFrom(i){
 function transferChoose(){
  let v=amount();
  if(v<=0){$('#message').textContent='DIGITE UM VALOR';return}
- open(`<h2>Transferir De</h2>${playerRows('transferFrom')}<button class="secondary" onclick="cancelModal()">CANCELAR</button>`);
+ open(`<h2>Transferir De</h2>${playerRows('transferFrom')}<button class="secondary" onclick="close()">CANCELAR</button>`);
 }
 function transferFrom(from){
  let v=amount();
@@ -308,7 +296,7 @@ function transferFrom(from){
  window.transferSource=from;
  open(`<h2>Transferir Para</h2>${playerRows('transferTo',from)}
  <button class="secondary" onclick="transferChoose()">VOLTAR</button>
- <button class="secondary" onclick="cancelModal()">CANCELAR</button>`);
+ <button class="secondary" onclick="close()">CANCELAR</button>`);
 }
 function transferTo(to){
  let from=window.transferSource,v=amount();
@@ -351,15 +339,21 @@ document.addEventListener('pointerdown',e=>{
 document.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>{if(typed.length<12 && (!typed.includes('.') || typed.split('.')[1].length<2))typed+=b.dataset.n;render()});
 document.querySelectorAll('[data-cmd]').forEach(b=>b.onclick=()=>{
  let c=b.dataset.cmd;
- if(c==='menu') menu();
- if(c==='inc1000'){typed=String(amount()+1000);render();}
- if(c==='inc100'){typed=String(amount()+100);render();}
- if(c==='clear'){typed='';render();}
- if(c==='dot'&&!typed.includes('.')){typed=(typed||'0')+'.';render();}
- if(c==='bonus') fixedBonus();
- if(c==='receive') receiveChoose();
- if(c==='pay') payChoose();
- if(c==='transfer') transferChoose();
+ if(c==='menu')menu();
+ if(c==='m'){
+   if(amount()<=0){$('#message').textContent='DIGITE UM VALOR';return}
+   chooseDebit();
+ } 
+ if(c==='clear'){typed='';render()}
+ if(c==='k'){
+   if(amount()<=0){$('#message').textContent='DIGITE UM VALOR';return}
+   chooseCredit();
+ }
+ if(c==='menu'){}
+
+ if(c==='dot'&&!typed.includes('.')){typed=(typed||'0')+'.';render()}
+ if(c==='bonus')fixedBonus();
+ if(c==='receive')receiveChoose(); if(c==='pay')payChoose(); if(c==='transfer')transferChoose();
 });
 window.addEventListener('popstate',()=>{if($('#overlay').style.display==='flex')close();});
 render();
