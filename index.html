@@ -52,7 +52,7 @@ button{font:inherit}
     <button class="key" data-n="4">4</button><button class="key" data-n="5">5</button><button class="key" data-n="6">6</button>
     <button class="key" data-n="1">1</button><button class="key" data-n="2">2</button><button class="key" data-n="3">3</button>
     <button class="key fn c" data-cmd="clear">C</button><button class="key" data-n="0">0</button><button class="key" data-cmd="dot">.</button>
-    <button class="key action plus" data-cmd="receive">+ JOGADOR</button><button class="key action neutral" data-cmd="transfer"><span style="font-size:clamp(42px,12vw,72px);line-height:1">👥</span></button><button class="key action minus" data-cmd="pay">JOGADOR −</button>
+    <button class="key action plus" data-cmd="receive">+ JOGADOR</button><button class="key action neutral" data-cmd="transfer">👥</button><button class="key action minus" data-cmd="pay">JOGADOR −</button>
   </div>
 </main>
 <div class="overlay" id="overlay"><section class="panel" id="panel"></section></div>
@@ -76,17 +76,17 @@ function keySound(){
 }
 function creditSound(){
   // Crédito: moedas/caixa registradora, brilhante e ascendente.
-  tone(880,.055,'sine',.12,0);
-  tone(1320,.06,'sine',.12,.045);
-  tone(1760,.07,'sine',.11,.09);
-  tone(2349,.13,'sine',.13,.145);
+  tone(880,.09,'sine',.32,0);
+  tone(1320,.10,'sine',.32,.065);
+  tone(1760,.11,'sine',.30,.13);
+  tone(2349,.18,'sine',.34,.20);
 }
 function debitSound(){
   // Débito: saída de dinheiro, descendente e mais grave.
-  tone(784,.055,'triangle',.12,0);
-  tone(587,.07,'triangle',.12,.05);
-  tone(440,.09,'triangle',.13,.105);
-  tone(294,.14,'triangle',.14,.18);
+  tone(784,.09,'triangle',.34,0);
+  tone(587,.10,'triangle',.34,.065);
+  tone(440,.13,'triangle',.36,.13);
+  tone(294,.20,'triangle',.38,.21);
 }
 
 let game=JSON.parse(localStorage.getItem(KEY)||'null')||{players:[],active:0,history:[]};
