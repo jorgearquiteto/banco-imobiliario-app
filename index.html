@@ -34,6 +34,12 @@ button{font:inherit}
 .cardColor{width:54px;height:54px;border-radius:9px;display:inline-block;flex:0 0 54px}
 .item{padding:10px 0;border-bottom:1px solid #ccc}
 .small{font-size:13px;color:#555}
+
+/* Apenas ajustes visuais dos dois botões solicitados. */
+.key.fn.back.moneyBonus{background:linear-gradient(#19c832,#079d1d);color:#fff;display:flex;align-items:center;justify-content:center}
+.moneyBonus svg{display:block;width:60%;height:68%;max-width:90px;max-height:90px}
+.key.action.neutral.transferPeople{display:flex;align-items:center;justify-content:center}
+.transferPeople .peopleIcon{display:block;font-size:clamp(42px,12vw,76px);line-height:1;transform:scale(1.1);font-family:'Segoe UI Emoji','Noto Color Emoji',sans-serif}
 </style>
 </head>
 <body>
@@ -47,12 +53,12 @@ button{font:inherit}
 👥 TRANSFERIR</div>
   </div></div>
   <div class="pad">
-    <button class="key fn m" data-cmd="inc1000">+1K</button><button class="key fn back" data-cmd="bonus">←</button><button class="key fn k" data-cmd="inc100">+100</button>
+    <button class="key fn m" data-cmd="inc1000">+1K</button><button class="key fn back moneyBonus" data-cmd="bonus" aria-label="Bônus de 2 mil"><svg viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"><path d="M9 34 56 10 91 34 44 58Z"/><path d="M9 47 44 71 91 47"/><path d="M9 60 44 84 91 60"/><path d="M9 34v12M44 58v12M91 34v12"/></g><text x="50" y="44" font-size="30" font-weight="bold" fill="white" text-anchor="middle" transform="rotate(-16 50 44)">$</text></svg></button><button class="key fn k" data-cmd="inc100">+100</button>
     <button class="key" data-n="7">7</button><button class="key" data-n="8">8</button><button class="key" data-n="9">9</button>
     <button class="key" data-n="4">4</button><button class="key" data-n="5">5</button><button class="key" data-n="6">6</button>
     <button class="key" data-n="1">1</button><button class="key" data-n="2">2</button><button class="key" data-n="3">3</button>
     <button class="key fn c" data-cmd="clear">C</button><button class="key" data-n="0">0</button><button class="key" data-cmd="dot">.</button>
-    <button class="key action plus" data-cmd="receive">+ JOGADOR</button><button class="key action neutral" data-cmd="transfer">👥</button><button class="key action minus" data-cmd="pay">JOGADOR −</button>
+    <button class="key action plus" data-cmd="receive">+ JOGADOR</button><button class="key action neutral transferPeople" data-cmd="transfer" aria-label="Transferir entre jogadores"><span class="peopleIcon" aria-hidden="true">👥</span></button><button class="key action minus" data-cmd="pay">JOGADOR −</button>
   </div>
 </main>
 <div class="overlay" id="overlay"><section class="panel" id="panel"></section></div>
